@@ -3,6 +3,11 @@
 ** Date: 4/17/2018
 ** Description: Project 1 CS 475
 *********************************************************************/
+#include <omp.h>
+#include <iostream>
+
+#define NUMNODES 1
+
 #define XMIN	 0.
 #define XMAX	 3.
 #define YMIN	 0.
@@ -52,7 +57,8 @@ float Height( int, int );
 
 int main( int argc, char *argv[ ] )
 {
-	. . .
+	std::cout << "Hi\n";
+	//. . .
 
 	// the area of a single full-sized tile:
 
@@ -62,7 +68,7 @@ int main( int argc, char *argv[ ] )
 	// sum up the weighted heights into the variable "volume"
 	// using an OpenMP for loop and a reduction:
 
-	?????
+	//?????
 }
 
 float Height( int iu, int iv )	// iu,iv = 0 .. NUMNODES-1
