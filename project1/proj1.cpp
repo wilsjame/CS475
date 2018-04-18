@@ -6,6 +6,7 @@
 #include <omp.h>
 #include <iostream>
 #include <stdio.h>
+//#include <math.h>
 
 #define XMIN	 0.
 #define XMAX	 3.
@@ -78,7 +79,10 @@ int main( int argc, char *argv[ ] )
 	// sum up the weighted heights into the variable "volume"
 	// using an OpenMP for loop and a reduction:
 	
-#pragma omp parallel for default(none), shared(fullTileArea), reduction(+:volume)
+	/* Set up timer */
+	double time0 = omp_get_wtime( );
+
+	#pragma omp parallel for default(none), shared(fullTileArea), reduction(+:volume)
 	for( int i = 0; i < NUMNODES*NUMNODES; i++ )
 	{
 		int iu = i % NUMNODES;
@@ -107,7 +111,10 @@ int main( int argc, char *argv[ ] )
 
 	}
 
+	double time1 = omp_get_wtime( );
+
 	std::cout << "volume is " << volume << "\n";
+	std::cout << "time1 - time0 = " << time1 - time0 << "\n";
 }
 
 /* Evaluate the height at given iu and iv */
