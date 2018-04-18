@@ -5,8 +5,7 @@
 *********************************************************************/
 #include <omp.h>
 #include <iostream>
-
-#define NUMNODES 1
+#include <stdio.h>
 
 #define XMIN	 0.
 #define XMAX	 3.
@@ -53,24 +52,65 @@
 #define BOTZ23  -8.
 #define BOTZ33  -3.
 
+#define NUMT 2
+#define NUMNODES 1500
+
 float Height( int, int );
 
 int main( int argc, char *argv[ ] )
 {
-	std::cout << "Hi\n";
-	//. . .
+
+#ifndef _OPENMP
+        fprintf( stderr, "OpenMP is not supported here -- sorry.\n" );
+        return 1;
+#endif
+
+        omp_set_num_threads( NUMT );
+	fprintf( stderr, "Using %d threads\n", NUMT );
+
+	double volume = 0;
 
 	// the area of a single full-sized tile:
-
+	
 	float fullTileArea = (  ( ( XMAX - XMIN )/(float)(NUMNODES-1) )  *
 				( ( YMAX - YMIN )/(float)(NUMNODES-1) )  );
 
 	// sum up the weighted heights into the variable "volume"
 	// using an OpenMP for loop and a reduction:
+	
+#pragma omp parallel for default(none), shared(fullTileArea), reduction(+:volume)
+	for( int i = 0; i < NUMNODES*NUMNODES; i++ )
+	{
+		int iu = i % NUMNODES;
+		int iv = i / NUMNODES;
 
-	//?????
+		/* Check if corner tile (quarter of full tile area) */
+		if( ( iu == 0 && iv == 0 ) || 
+		    ( iu ==  NUMNODES - 1 && iv == 0 ) ||
+		    ( iu == 0 && iv ==  NUMNODES - 1 ) || 
+		    ( iu ==  NUMNODES - 1 && iv == NUMNODES - 1 ) )
+		{
+			volume += ( fullTileArea / 4 ) * Height( iu, iv );
+		}
+		/* Check if edge tile (half of full tile area) */
+		else if( ( iu == 0 ) || ( iv == 0 ) || 
+			 ( iu == NUMNODES - 1 ) || 
+			 ( iv == NUMNODES - 1 ) ) 
+		{
+			volume += ( fullTileArea / 2 ) * Height( iu, iv );
+		}
+		/* Must be a middle tile  full tile area) */
+		else
+		{
+			volume += fullTileArea * Height( iu, iv );
+		}
+
+	}
+
+	std::cout << "volume is " << volume << "\n";
 }
 
+/* Evaluate the height at given iu and iv */
 float Height( int iu, int iv )	// iu,iv = 0 .. NUMNODES-1
 {
 	float u = (float)iu / (float)(NUMNODES-1);
