@@ -68,6 +68,7 @@ int main( int argc, char *argv[ ] )
 
         omp_set_num_threads( NUMT );
 	fprintf( stderr, "Using %d threads\n", NUMT );
+	std::cout << "Using " << NUMNODES << " nodes\n";
 
 	double volume = 0;
 
@@ -113,8 +114,12 @@ int main( int argc, char *argv[ ] )
 
 	double time1 = omp_get_wtime( );
 
-	std::cout << "volume is " << volume << "\n";
-	std::cout << "time1 - time0 = " << time1 - time0 << "\n";
+	/* Calculate heights computed per second */
+	double heights = (double)NUMNODES / ( time1 - time0 );
+
+	std::cout << "Volume ~ " << volume << "\n";
+	std::cout << "Time ~ " << time1 - time0 << " seconds\n";
+	std::cout << "heights computed per second " << heights << "\n";
 }
 
 /* Evaluate the height at given iu and iv */
