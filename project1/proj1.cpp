@@ -1,12 +1,11 @@
 /*********************************************************************
 ** Author: James G Wilson
-** Date: 4/17/2018
+** Date: 4/18/2018
 ** Description: Project 1 CS 475
 *********************************************************************/
 #include <omp.h>
 #include <iostream>
 #include <stdio.h>
-//#include <math.h>
 
 #define XMIN	 0.
 #define XMAX	 3.
@@ -53,8 +52,9 @@
 #define BOTZ23  -8.
 #define BOTZ33  -3.
 
-#define NUMT 2
-#define NUMNODES 1500
+/* These will be varied automatically using the benchmark script */
+//#define NUMT 
+//#define NUMNODES 
 
 float Height( int, int );
 
@@ -66,9 +66,11 @@ int main( int argc, char *argv[ ] )
         return 1;
 #endif
 
+	std::cout << "-------------------------------------\n";
         omp_set_num_threads( NUMT );
-	fprintf( stderr, "Using %d threads\n", NUMT );
-	std::cout << "Using " << NUMNODES << " nodes\n";
+	//fprintf( stderr, "Using %d threads\n", NUMT );
+	std::cout << "NUMT = " << NUMT << "\n";
+	std::cout << "NUMNODES = " << NUMNODES << "\n";
 
 	double volume = 0;
 
@@ -119,7 +121,7 @@ int main( int argc, char *argv[ ] )
 
 	std::cout << "Volume ~ " << volume << "\n";
 	std::cout << "Time ~ " << time1 - time0 << " seconds\n";
-	std::cout << "heights computed per second " << heights << "\n";
+	std::cout << "Heights/sec ~ " << heights << "\n";
 }
 
 /* Evaluate the height at given iu and iv */
