@@ -117,11 +117,11 @@ int main( int argc, char *argv[ ] )
 	double time1 = omp_get_wtime( );
 
 	/* Calculate heights computed per second */
-	double heights = (double)NUMNODES / ( time1 - time0 );
+	double megaHeights = ( (double)NUMNODES * (double)NUMNODES ) / ( time1 - time0 ) / 1000000;
 
 	std::cout << "Volume ~ " << volume << "\n";
 	std::cout << "Time ~ " << time1 - time0 << " seconds\n";
-	std::cout << "Heights/sec ~ " << heights << "\n";
+	std::cout << "megaHeights/sec ~ " << megaHeights << "\n";
 }
 
 /* Evaluate the height at given iu and iv */
