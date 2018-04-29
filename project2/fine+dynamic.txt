@@ -1,0 +1,17 @@
+*** Project 3 Benchmarks ***
+---------------------------
+NUMTHREADS = 1
+Fine-grained, Dynamic
+time = 0.0954653 sec
+megaBodiesPerSec = 20.95
+---------------------------
+NUMTHREADS = 2
+Fine-grained, Dynamic
+time = 0.0721261 sec
+megaBodiesPerSec = 27.7292
+---------------------------
+NUMTHREADS = 4
+Fine-grained, Dynamic
+time = 0.0705184 sec
+megaBodiesPerSec = 28.3614
+*** Done ***
