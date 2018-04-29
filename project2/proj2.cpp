@@ -135,9 +135,11 @@ main( int argc, char *argv[ ] )
 
  
 
-         double time0 = omp_get_wtime( );
-
  
+
+
+	 // Set up timer
+	 double time0 = omp_get_wtime( );
 
 	 // Control scheduling by adding a clause to end of 
 	 // omp parallel for. Use either schedule(static or dynamic).
@@ -219,6 +221,10 @@ main( int argc, char *argv[ ] )
                           Bodies[i].vznew = Bodies[i].vz + az*TIMESTEP;
 
                  }
+
+		 // Stop timer
+		 double time1 = omp_get_wtime( );
+
 
  
 
