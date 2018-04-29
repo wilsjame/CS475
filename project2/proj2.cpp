@@ -133,13 +133,12 @@ main( int argc, char *argv[ ] )
 
          };
 
- 
-
- 
 
 
 	 // Set up timer
 	 double time0 = omp_get_wtime( );
+
+
 
 	 // Control scheduling by adding a clause to end of 
 	 // omp parallel for. Use either schedule(static or dynamic).
@@ -221,12 +220,8 @@ main( int argc, char *argv[ ] )
                           Bodies[i].vznew = Bodies[i].vz + az*TIMESTEP;
 
                  }
-
-		 // Stop timer
-		 double time1 = omp_get_wtime( );
-
-
  
+
 
                  // setup the state for the next animation step:
 
@@ -260,7 +255,9 @@ main( int argc, char *argv[ ] )
 
          double time1 = omp_get_wtime( );
 
- 
+
+	 // Calculate MegaBodies Compared Per Second
+	 double megaBodiesPerSec = ((double)(NUMBODIES*NUMBODIES*NUMSTEPS)/(time1-time0)/1000000);
 
          // print performance here:::
 
