@@ -12,6 +12,8 @@
 
 #include <omp.h>
 
+#include <iostream>
+
  
 
 // constants:
@@ -260,8 +262,10 @@ main( int argc, char *argv[ ] )
 	 double megaBodiesPerSec = ((double)(NUMBODIES*NUMBODIES*NUMSTEPS)/(time1-time0)/1000000);
 
          // print performance here:::
-
+	 std::cout << "time = " << time1 - time0 << " sec\n";
+	 std::cout << "megaBodiesPerSec = " << megaBodiesPerSec << "\n"; 
  
+
 
          return 0;
 
