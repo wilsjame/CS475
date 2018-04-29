@@ -32,6 +32,10 @@ const double TIMESTEP             =   1.0; // secs
 
 #define NUMSTEPS           200
 
+/* These will be varied automatically when using the benchmark script */
+#define NUMTHREADS 1
+
+
  
 
 struct body
