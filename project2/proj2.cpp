@@ -144,11 +144,17 @@ main( int argc, char *argv[ ] )
 
 	 // Control scheduling by adding a clause to end of 
 	 // omp parallel for. Use either schedule(static or dynamic).
+	 //std::cout << "Coarse-grained, ";
+	 std::cout << "Fine-grained, ";
+	 std::cout << "Static\n";
+	 //std::cout << "Dynamic\n";
+
          for( int t = 0; t < NUMSTEPS; t++ )
 
          {
 
 		 // "Coarse-grained parallelism" omp parallel for here
+		 //#pragma omp parallel for default(none), shared(Bodies), schedule(dynamic)
                  for( int i = 0; i < NUMBODIES; i++ )
 
                  {
@@ -163,6 +169,7 @@ main( int argc, char *argv[ ] )
 
 			  // "Fine-grained parallelism" omp parallel for here
 			  // fx, fy, fz need to undergo a reduction-add
+			  #pragma omp parallel for default(none), shared(Bodies, i, bi), reduction(+:fx, fy, fz), schedule(static)
                           for( int j = 0; j < NUMBODIES; j++ )
 
                           {
