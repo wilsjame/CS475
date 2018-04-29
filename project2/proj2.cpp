@@ -107,6 +107,7 @@ main( int argc, char *argv[ ] )
          int numProcessors = omp_get_num_procs( );
 
          fprintf( stderr, "Have %d processors.\n", numProcessors );
+	 
 
  
 
@@ -138,10 +139,13 @@ main( int argc, char *argv[ ] )
 
  
 
+	 // Control scheduling by adding a clause to end of 
+	 // omp parallel for. Use either schedule(static or dynamic).
          for( int t = 0; t < NUMSTEPS; t++ )
 
          {
 
+		 // "Coarse-grained parallelism" omp parallel for here
                  for( int i = 0; i < NUMBODIES; i++ )
 
                  {
@@ -154,6 +158,8 @@ main( int argc, char *argv[ ] )
 
                           Body *bi = &Bodies[i];
 
+			  // "Fine-grained parallelism" omp parallel for here
+			  // fx, fy, fz need to undergo a reduction-add
                           for( int j = 0; j < NUMBODIES; j++ )
 
                           {
