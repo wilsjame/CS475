@@ -28,13 +28,11 @@ struct s
 
          int pad[NUMPAD];
 
-} Array[NUMT];
+} Array[4];
 
  
 int main()
 {
-
-	//std::cout << "-------------------\n";
 
 #ifndef _OPENMP
 
@@ -66,7 +64,7 @@ int main()
 	 
          #pragma omp parallel for 
 
-         for( int i = 0; i < NUMT; i++ )
+         for( int i = 0; i < 4; i++ )
 
          {
 
@@ -92,7 +90,7 @@ int main()
 
 
 	// Calculate MegaAdds Per Second
-	double megaAddsPerSec = ((double)((someBigNumber)/(time1-time0)/1000000));
+	float megaAddsPerSec = (((float)someBigNumber * NUMT)/(time1-time0)/1000000);
 
         // print performance here:::
 	std::cout << "time = " << time1 - time0 << " sec\n";
