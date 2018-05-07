@@ -80,7 +80,7 @@ int main()
 	double time1 = omp_get_wtime( );
 
 	// Calculate MegaAdds Per Second
-	float megaAddsPerSec = ((float)(someBigNumber)/(time1-time0)/1000000);
+	float megaAddsPerSec = (((float)someBigNumber * NUMT)/(time1-time0)/1000000);
 
         // print performance here:::
 	//std::cout << "time = " << time1 - time0 << " sec\n";
