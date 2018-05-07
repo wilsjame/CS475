@@ -1,0 +1,17 @@
+*** Project 3 Fix #2 Benchmarks ***
+--------------
+NUMT = 1
+>>>>>>>>>>>>>>
+time = 9.60166 sec
+megaAddsPerSec = 104.149
+--------------
+NUMT = 2
+>>>>>>>>>>>>>>
+time = 12.1553 sec
+megaAddsPerSec = 164.538
+--------------
+NUMT = 4
+>>>>>>>>>>>>>>
+time = 11.625 sec
+megaAddsPerSec = 344.087
+*** Done ***
