@@ -22,6 +22,7 @@ void Watcher();
 //void MyAgent();
 
 // Utility functions. 
+void computeWeather(); 
 float SQR(float);
 float Ranf(unsigned int*, float, float);
 int Randf(unsigned int*, int, int);
@@ -63,19 +64,8 @@ int main()
 	NowNumDeer = 1;
 	NowHeight =  1.;
 	
-	// Calculate temperature and precipitation.
-	float ang = (  30.*(float)NowMonth + 15.  ) * ( M_PI / 180. );
-
-	float temp = AVG_TEMP - AMP_TEMP * cos( ang );
-	unsigned int seed = 0;
-	NowTemp = temp + Ranf( &seed, -RANDOM_TEMP, RANDOM_TEMP );
-	
-	float precip = AVG_PRECIP_PER_MONTH + AMP_PRECIP_PER_MONTH * sin( ang );
-	NowPrecip = precip + Ranf( &seed,  -RANDOM_PRECIP, RANDOM_PRECIP );
-	if( NowPrecip < 0. )
-	{
-		NowPrecip = 0.;
-	}
+	// Starting temperature and precipitation.
+	computeWeather();
 	
 	// Know how many threads already, start them with parallel sections
 	omp_set_num_threads( 3 );	// same as # of sections
@@ -108,6 +98,25 @@ int main()
 	return 0;
 }
 
+// Calculate temperature and precipitation.
+void computeWeather()
+{
+	
+	float ang = (  30.*(float)NowMonth + 15.  ) * ( M_PI / 180. );
+
+	float temp = AVG_TEMP - AMP_TEMP * cos( ang );
+	unsigned int seed = 0;
+	NowTemp = temp + Ranf( &seed, -RANDOM_TEMP, RANDOM_TEMP );
+	
+	float precip = AVG_PRECIP_PER_MONTH + AMP_PRECIP_PER_MONTH * sin( ang );
+	NowPrecip = precip + Ranf( &seed,  -RANDOM_PRECIP, RANDOM_PRECIP );
+	if( NowPrecip < 0. )
+	{
+		NowPrecip = 0.;
+	}
+	
+}
+
 // Compute next number of graindeer, based on set of global variables,
 // into local, temporary, variables. 
 void GrainDeer()
@@ -131,11 +140,14 @@ void GrainDeer()
 		
 		// DoneComputing barrier:
 		#pragma omp barrier
-		//. . .
+		NowNumDeer = tempNumDeer;
 	
 		// DoneAssigning barrier:
 		#pragma omp barrier
-		//. . .
+		
+		// Print current set of global state variables. 
+		// Increment month count.
+		// Compute new temperature and precipitation. 
 	
 		// DonePrinting barrier:
 		#pragma omp barrier
@@ -154,25 +166,26 @@ void Grain()
 		
 		// compute a temporary next-value for this quantity
 		// based on the current state of the simulation:
+		float tempNowHeight = NowHeight;
 		float tempFactor = exp(   -SQR(  ( NowTemp - MIDTEMP ) / 10.  )   );
 		float precipFactor = exp(   -SQR(  ( NowPrecip - MIDPRECIP ) / 10.  )   );
-		float tempNowHeight = NowHeight;
 		
-		NowHeight += tempFactor * precipFactor * GRAIN_GROWS_PER_MONTH;
- 		tempNowHeight -= (float)NowNumDeer * ONE_DEER_EATS_PER_MONTH;
+		tempNowHeight += tempFactor * precipFactor * GRAIN_GROWS_PER_MONTH;
+		float temptempNowHeight = tempNowHeight; // crappy hack to clamp height to zero xD 
+ 		temptempNowHeight -= (float)NowNumDeer * ONE_DEER_EATS_PER_MONTH;
  		
- 		if(tempNowHeight <= 0)
+ 		if(temptempNowHeight <= 0)
  		{
- 			NowHeight = 0;
+ 			tempNowHeight = 0;
  		}
  		else
  		{
- 			NowHeight = tempNowHeight; 
+ 			tempNowHeight = temptempNowHeight; 
  		}
 	
 		// DoneComputing barrier:
 		#pragma omp barrier
-		//. . .
+		NowHeight = tempNowHeight;
 	
 		// DoneAssigning barrier:
 		#pragma omp barrier
@@ -192,15 +205,15 @@ void Watcher()
 	{
 		// compute a temporary next-value for this quantity
 		// based on the current state of the simulation:
-		//. . .
+		// NULL
 	
 		// DoneComputing barrier:
 		#pragma omp barrier
-		//. . .
+		// NULL
 	
 		// DoneAssigning barrier:
 		#pragma omp barrier
-		//. . .
+		
 	
 		// DonePrinting barrier:
 		#pragma omp barrier
