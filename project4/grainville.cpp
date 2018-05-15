@@ -28,7 +28,6 @@ float SQR(float);
 float Ranf(unsigned int*, float, float);
 int Randf(unsigned int*, int, int);
 unsigned int seed = 0;  // a thread-private variable
-//float x = Ranf( &seed;, -1.f, 1.f );
 
 // The "state" of the system consists of the following global variables.
 int	NowYear;			// 2017 - 2022
@@ -76,17 +75,17 @@ int main()
 	{
 		#pragma omp section
 		{
-			//GrainDeer( );
+			GrainDeer( );
 		}
 	
 		#pragma omp section
 		{
-			//Grain( );
+			Grain( );
 		}
 	
 		#pragma omp section
 		{
-			//Watcher( );
+			Watcher( );
 		}
 	
 		#pragma omp section
@@ -96,9 +95,8 @@ int main()
 	}	// implied barrier -- all functions must return in order
 		// to allow any of them to get past here
 		
-		
-
 	return 0;
+	
 }
 
 // Compute next number of graindeer, based on set of global variables,
@@ -192,10 +190,19 @@ void Watcher()
 		
 		// Print current set of global state variables. 
 		printState();
+		
 		// Increment month count.
+		NowMonth++;
+		
+		if(NowMonth == 12)
+		{
+			NowMonth = 0;
+			NowYear++; 
+		}
+		
 		// Compute new temperature and precipitation. 
-	
-	
+		computeWeather();
+		
 		// DonePrinting barrier:
 		#pragma omp barrier
 		//. . .
@@ -224,32 +231,6 @@ void computeWeather()
 	
 }
 
-/*
-// The "state" of the system consists of the following global variables.
-int	NowYear;			// 2017 - 2022
-int	NowMonth;		// 0 - 11
-
-float	NowPrecip;		// inches of rain per month
-float	NowTemp;			// temperature this month
-float	NowHeight;		// grain height in inches
-int	NowNumDeer;		// number of deer in the current population
-
-// Initialize temperature and precipitation constants. 
-const float GRAIN_GROWS_PER_MONTH =		8.0;	// inches
-const float ONE_DEER_EATS_PER_MONTH =	0.5;
-
-const float AVG_PRECIP_PER_MONTH =		6.0;	// average (inches)
-const float AMP_PRECIP_PER_MONTH =		6.0;	// plus or minus
-const float RANDOM_PRECIP =				2.0;	// plus or minus noise
-
-const float AVG_TEMP =						50.0;	// average (deg_F)
-const float AMP_TEMP =						20.0;	// plus or minus
-const float RANDOM_TEMP =					10.0;	// plus or minus noise
-
-const float MIDTEMP =						40.0;
-const float MIDPRECIP =						10.0;
-*/
-
 // Print current set of global state variables. 
 void printState()
 {
@@ -264,6 +245,7 @@ void printState()
 	std::cout << "Year #: " << NowYear << "\n";
 	std::cout << "Month #: " << NowMonth << "\n";
 }
+
 // Utility function.
 float SQR(float x)
 {
