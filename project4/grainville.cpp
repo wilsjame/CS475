@@ -19,7 +19,7 @@
 void GrainDeer();
 void Grain();
 void Watcher();
-//void MyAgent();
+void alienVisitor();
 
 // Utility functions. 
 void computeWeather(); 
@@ -37,6 +37,7 @@ float	NowPrecip;		// inches of rain per month
 float	NowTemp;			// temperature this month
 float	NowHeight;		// grain height in inches
 int	NowNumDeer;		// number of deer in the current population
+int   aliensVisited = 0; 
 
 // Initialize temperature and precipitation constants. 
 const float GRAIN_GROWS_PER_MONTH =		8.0;	// inches
@@ -70,7 +71,7 @@ int main()
 	printState();
 	
 	// Know how many threads already, start them with parallel sections
-	omp_set_num_threads( 3 );	// same as # of sections
+	omp_set_num_threads( 4 );	// same as # of sections
 	#pragma omp parallel sections
 	{
 		#pragma omp section
@@ -90,7 +91,7 @@ int main()
 	
 		#pragma omp section
 		{
-			//MyAgent( );	// your own
+			alienVisitor( );	
 		}
 	}	// implied barrier -- all functions must return in order
 		// to allow any of them to get past here
@@ -122,7 +123,10 @@ void GrainDeer()
 		
 		// DoneComputing barrier:
 		#pragma omp barrier
-		NowNumDeer = tempNumDeer;
+		if(aliensVisited == 0)
+		{
+			NowNumDeer = tempNumDeer;
+		}
 	
 		// DoneAssigning barrier:
 		#pragma omp barrier
@@ -163,8 +167,11 @@ void Grain()
 	
 		// DoneComputing barrier:
 		#pragma omp barrier
-		NowHeight = tempNowHeight;
-	
+		if(aliensVisited == 0)
+		{
+			NowHeight = tempNowHeight;
+		}
+			
 		// DoneAssigning barrier:
 		#pragma omp barrier
 		//. . .
@@ -210,7 +217,62 @@ void Watcher()
 	
 }
 
-//void MyAgent();
+// Aliens visit Grainville and control the growth of grain or the graindeer population. 
+void alienVisitor()
+{
+	
+	while( NowYear < 2023 )
+	{
+		
+		// compute a temporary next-value for this quantity
+		// based on the current state of the simulation:
+		float tempNumDeer = NowNumDeer;
+		float tempNowHeight = NowHeight;
+				
+		aliensVisited = 0;
+		
+		if(NowYear == 2020 && NowMonth == 2)
+		{
+			
+			aliensVisited = 1;
+			
+			// Graindeer from a far away galaxy find refuge in Grainville.
+			// They will not land if the current population is too high.
+			if(tempNumDeer < 10)
+			{
+				tempNumDeer++;
+				tempNumDeer++;
+				tempNumDeer++;
+				tempNumDeer++;
+				tempNumDeer++;
+				tempNumDeer++;
+			}
+			
+			// They bring with them the grain salvaged from their alien grainville. 
+			// Even if they dont stay, they leave the grain behind. 
+			tempNowHeight++;
+			tempNowHeight++;
+			tempNowHeight++;
+			
+		}
+		
+		// DoneComputing barrier:
+		#pragma omp barrier
+		if(aliensVisited == 1)
+		{
+			NowNumDeer = tempNumDeer;
+			NowHeight = tempNowHeight;
+		}
+
+		// DoneAssigning barrier:
+		#pragma omp barrier
+		
+		// DonePrinting barrier:
+		#pragma omp barrier
+		//. . .
+	}
+	
+}
 
 // Calculate temperature and precipitation.
 void computeWeather()
@@ -234,6 +296,14 @@ void computeWeather()
 // Print current set of global state variables. 
 void printState()
 {
+	std::cout << "Year #: " << NowYear << "\n";
+	std::cout << "Month #: " << NowMonth << "\n";
+	
+	if(aliensVisited == 1)
+	{
+		std::cout << "***ALIENS VISITED***" << "\n";
+	}
+	
 	std::cout << "Temperature (F): " << NowTemp << "\n";
 	std::cout << "Temperature (C): " << (5./9.)*(NowTemp-32) << "\n";
 	std::cout << "Precipitation (in): " << NowPrecip << "\n";
@@ -241,9 +311,7 @@ void printState()
 	std::cout << "Number of graindeer: " << NowNumDeer << "\n";
 	std::cout << "Height of grain (in): " << NowHeight << "\n";
 	std::cout << "Height of grain (cm): " << NowHeight*2.54 << "\n";
-	std::cout << "Own quantity: " << "NULL" << "\n";
-	std::cout << "Year #: " << NowYear << "\n";
-	std::cout << "Month #: " << NowMonth << "\n";
+
 }
 
 // Utility function.
