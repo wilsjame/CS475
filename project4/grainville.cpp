@@ -296,6 +296,10 @@ void computeWeather()
 // Print current set of global state variables. 
 void printState()
 {
+	
+	std::cout << NowYear << " " << NowMonth << " " << (5./9.)*(NowTemp-32) << " " << NowPrecip*2.54 << " " << NowNumDeer << " " << NowHeight*2.54 << " " << aliensVisited << "\n";
+	
+	/*
 	std::cout << "Year #: " << NowYear << "\n";
 	std::cout << "Month #: " << NowMonth << "\n";
 	
@@ -311,7 +315,7 @@ void printState()
 	std::cout << "Number of graindeer: " << NowNumDeer << "\n";
 	std::cout << "Height of grain (in): " << NowHeight << "\n";
 	std::cout << "Height of grain (cm): " << NowHeight*2.54 << "\n";
-
+	*/
 }
 
 // Utility function.
