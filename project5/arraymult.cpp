@@ -18,32 +18,32 @@ float C[ARRAYSIZE];
 
 int main()
 {
-
-	std::cout << "ARRAYSIZE: " << ARRAYSIZE << "\n";
+	double time0;
+	double time1;
 
 	std::cout << "ArrayMult ";
-	double time0 = omp_get_wtime();
+	time0 = omp_get_wtime();
 	ArrayMult(ARRAYSIZE, A, B, C);
-	double time1 = omp_get_wtime();
-	std::cout << "Time: " << time1 - time0 << " sec\n";
+	time1 = omp_get_wtime();
+	std::cout << time1 - time0 << "\n";
 
 	std::cout << "SimdMul ";
 	time0 = omp_get_wtime();
 	SimdMul(A, B, C, ARRAYSIZE);
 	time1 = omp_get_wtime();
-	std::cout << "Time: " << time1 - time0 << " sec\n";
+	std::cout << time1 - time0 << "\n";
 
 	std::cout << "ArrayMultSum ";
 	time0 = omp_get_wtime();
 	ArrayMultSum(ARRAYSIZE, A, B);
 	time1 = omp_get_wtime();
-	std::cout << "Time: " << time1 - time0 << " sec\n";
+	std::cout << time1 - time0 << "\n";
 
 	std::cout << "SimdMulSum";
 	time0 = omp_get_wtime();
 	SimdMulSum(A, B, ARRAYSIZE);
 	time1 = omp_get_wtime();
-	std::cout << "Time: " << time1 - time0 << " sec\n";
+	std::cout << time1 - time0 << "\n";
 
 	return 0;
 
