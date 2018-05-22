@@ -7,7 +7,7 @@
 #include <iostream>
 #include <omp.h>
 #include "simd.p5.h"
-#define ARRAYSIZE 32000000
+//#define ARRAYSIZE 
 
 void ArrayMult(int n, float *a, float *b, float *c);
 void ArrayMultSum(int n, float *a, float *b);
@@ -18,6 +18,8 @@ float C[ARRAYSIZE];
 
 int main()
 {
+
+	std::cout << "ARRAYSIZE: " << ARRAYSIZE << "\n";
 
 	std::cout << "ArrayMult ";
 	double time0 = omp_get_wtime();
