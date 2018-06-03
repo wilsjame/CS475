@@ -11,16 +11,16 @@
 #endif
 #include <omp.h>
 
-#include "CL/cl.h"
-#include "CL/cl_platform.h"
+#include "cl.h"
+#include "cl_platform.h"
 
 
 #ifndef NUM_ELEMENTS
-#define	NUM_ELEMENTS		64*1024*1024
+#define	NUM_ELEMENTS		//64*1024*1024
 #endif
 
 #ifndef LOCAL_SIZE
-#define	LOCAL_SIZE		32
+#define	LOCAL_SIZE		//32
 #endif
 
 #define	NUM_WORK_GROUPS		NUM_ELEMENTS/LOCAL_SIZE
@@ -144,7 +144,8 @@ main( int argc, char *argv[ ] )
 
 	// 8. compile and link the kernel code:
 
-	char *options = { "" };
+	// Add 'const' to fix warning: deprecated conversion...
+	const char *options = { "" };
 	status = clBuildProgram( program, 1, &device, options, NULL, NULL );
 	if( status != CL_SUCCESS )
 	{
