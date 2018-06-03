@@ -1,0 +1,12 @@
+*** Project 6 Part Three ArrayMultReduce Benchmarks ***
+    1024	  32	        32	     0.000 GigaMultsPerSecond
+    2048	  32	        64	     0.003 GigaMultsPerSecond
+    4096	  32	       128	     0.000 GigaMultsPerSecond
+   32768	  32	      1024	     0.043 GigaMultsPerSecond
+  131072	  32	      4096	     0.054 GigaMultsPerSecond
+  524288	  32	     16384	     0.033 GigaMultsPerSecond
+ 1048576	  32	     32768	     0.282 GigaMultsPerSecond
+ 2097152	  32	     65536	     1.522 GigaMultsPerSecond
+ 4194304	  32	    131072	     0.582 GigaMultsPerSecond
+ 8388608	  32	    262144	     3.199 GigaMultsPerSecond
+*** Done ***
